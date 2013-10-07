@@ -1,6 +1,8 @@
 # best_quotes/Gemfile
-source :rubygems
-gem 'rulers' # Your gem name
+source 'https://rubygems.org'
+gem "rulers", :path => "../rulers"
 
-# Specify your gem's dependencies in rulers.gemspec
-gemspec
+group :development do
+  gem 'listen', '~> 1.3.1'
+  gem 'rerun'
+end
