@@ -1,8 +1,9 @@
 PATH
   remote: ../rulers
   specs:
-    rulers (0.0.4)
+    rulers (0.0.5)
       erubis
+      multi_json
       rack
 
 GEM
@@ -15,6 +16,7 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
+    multi_json (1.8.1)
     rack (1.5.2)
     rb-fsevent (0.9.3)
     rb-inotify (0.9.2)
