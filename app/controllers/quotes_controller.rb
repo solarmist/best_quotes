@@ -14,13 +14,21 @@ class QuotesController < Rulers::Controller
     }
 
     quote = FileModel.create attrs
-    render :quote, :obj => quote
+    ua = request.user_agent
+    render :quote, :obj => quote, :ua => ua
+  end
+
+  def show
+    quote = FileModel.find(params["id"])
+    ua = request.user_agent
+    render :quote, :obj => quote, :ua => ua
   end
 
   def update_quote
-    return index unless env["REQUEST_METHOD"] == "POST"
+    # return index unless env["REQUEST_METHOD"] == "POST"
     quote = FileModel.save 2, {"submitter" => "Josh"}
-    render :quote, :obj => quote
+    ua = request.user_agent
+    render :quote, :obj => quote, :ua => ua
   end
 
   def a_quote
@@ -29,8 +37,8 @@ class QuotesController < Rulers::Controller
 
   def quote
     quote = FileModel.find env['QUERY_STRING']
-
-    render :quote, :obj => quote
+    ua = request.user_agent
+    render :quote, :obj => quote, :ua => ua
   end
 
   def exception
