@@ -3,17 +3,6 @@ require 'rack/lobster'
 
 require './config/application'
 
-map "/lobster" do
-  use Rack::ShowExceptions
-  run Rack::Lobster.new
-end
-
-map "/lobster/but_not" do
-  run proc {
-    [200, {}, ["Really not a lobster"]]
-  }
-end
-
 class BenchMarker
   def initialize(app, runs = 100)
     @app, @runs = app, runs
@@ -53,11 +42,39 @@ end
 use Rack::Auth::Basic, "app" do |user, pass|
     'secret' == pass && user == 'josh'
 end
-use BenchMarker, 10_000
-use Rack::ContentType
-use Canadianize, ", simple"
 
-run BestQuotes::Application.new
+app = BestQuotes::Application.new
+
+app.route do
+  match "", "quotes#index"
+  match "sub-app",
+    proc { [200, {}, ["Hello, sub-app!"]] }
+
+  # default routes
+  match ":controller/:id/:action"
+  match ":controller/:id",
+    :default => {"action" => "show"}
+  match ":controller",
+    :default => {"action" => "index"}
+end
+
+# use BenchMarker, 1_000
+use Rack::ContentType
+# use Canadianize, ", simple"
+
+map "/lobster" do
+  use Rack::ShowExceptions
+  run Rack::Lobster.new
+end
+
+map "/lobster/but_not" do
+  run proc {
+    [200, {}, ["Really not a lobster"]]
+  }
+end
+
+run app
+
 # run proc{
 #   [200, {'Content-Type' => 'text/html'},
 #    ["Hello, world"]]
